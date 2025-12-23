@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sipra_Portfolio_Chatbot</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #05000a, #000000);
+  font-family: 'Chakra Petch', sans-serif;
+
+
+  color: #e5e7eb;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+/* MOVING NEON GLOW */
+body::before {
+  content: "";
+  position: fixed;
+  width: 500px;
+  height: 500px;
+  background: #ff00ff;
+  filter: blur(200px);
+  opacity: 0.35;
+  animation: moveGlow 12s infinite alternate;
+}
+
+@keyframes moveGlow {
+  from { transform: translate(-200px, -200px); }
+  to { transform: translate(200px, 200px); }
+}
+
+.container {
+  width: 900px;
+  max-width: 95%;
+  background: rgba(0,0,0,0.7);
+  border: 2px solid #00fff0;
+  border-radius: 20px;
+  padding: 35px;
+  box-shadow:
+    0 0 25px #00fff0,
+    0 0 60px rgba(255,0,255,0.5);
+}
+
+/* HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 25px;
+}
+
+.header h1 {
+  font-size: 3rem;
+  color: #00fff0;
+  text-shadow:
+    0 0 8px #00fff0,
+    0 0 18px #00fff0;
+}
+
+.header p {
+  color: #ff00ff;
+  letter-spacing: 2px;
+  margin-top: 8px;
+}
+
+/* CHAT */
+.chat-box {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+/* MESSAGES */
+.message {
+  margin-bottom: 14px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+}
+
+.bot {
+  border-left: 4px solid #00fff0;
+  background: rgba(0,255,240,0.08);
+  box-shadow: 0 0 12px rgba(0,255,240,0.6);
+}
+
+.user {
+  border-right: 4px solid #ff00ff;
+  background: rgba(255,0,255,0.08);
+  text-align: right;
+  box-shadow: 0 0 12px rgba(255,0,255,0.6);
+}
+
+/* QUICK BUTTONS */
+.quick-actions {
+  display: flex;
+  gap: 12px;
+  margin: 18px 0;
+}
+
+.quick-actions button {
+  padding: 8px 16px;
+  border-radius: 999px;
+  border: 2px solid #ff00ff;
+  background: transparent;
+  color: #ff00ff;
+  cursor: pointer;
+  box-shadow: 0 0 10px #ff00ff;
+}
+
+.quick-actions button:hover {
+  background: #ff00ff;
+  color: #000;
+}
+
+/* INPUT */
+.input-area {
+  display: flex;
+  gap: 12px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 12px;
+  background: #000;
+  border: 2px solid #00fff0;
+  border-radius: 10px;
+  color: #00fff0;
+  outline: none;
+  box-shadow: 0 0 10px #00fff0;
+}
+
+.input-area button {
+  padding: 12px 18px;
+  background: #00fff0;
+  border: none;
+  border-radius: 10px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 15px #00fff0;
+}
+
+.footer {
+  margin-top: 25px;
+  text-align: center;
+  font-size: 0.75rem;
+  color: #ff00ff;
+  opacity: 0.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <div class="header">
+    <h1>SIPRABOT</h1>
+    <p>CHATBOT</p>
+  </div>
+
+  <div class="chat-box" id="chatBox">
+    <div class="message bot">
+
+      Ask me about my:<BR> skills, education, or projects.
+    </div>
+  </div>
+
+  <div class="quick-actions">
+    <button onclick="quickAsk('skills')">SKILLS</button>
+    <button onclick="quickAsk('education')">EDUCATION</button>
+    <button onclick="quickAsk('projects')">PROJECTS</button>
+  </div>
+
+  <div class="input-area">
+    <input type="text" id="userInput" placeholder="> type command">
+    <button onclick="sendMessage()">SEND</button>
+  </div>
+
+
+</div>
+
+<script>
+function addMessage(text, type) {
+  const chatBox = document.getElementById("chatBox");
+  const div = document.createElement("div");
+  div.className = "message " + type;
+  div.innerHTML = text;
+  chatBox.appendChild(div);
+  chatBox.scrollTop = chatBox.scrollHeight;
+}
+
+function botReply(msg) {
+  // greetings
+  if (
+    msg.includes("hi") ||
+    msg.includes("hello") ||
+    msg.includes("hey") ||
+    msg.includes("hii")
+  ) {
+    return "Hello. You can ask me about my skills, education, or projects.";
+  }
+
+  // skills
+  if (msg.includes("skill")) {
+    return "HTML, CSS, C, C++, Java, GitHub, UI/UX";
+  }
+
+  // education
+  if (msg.includes("education") || msg.includes("school") || msg.includes("college")) {
+    return "Completed schooling at Army Public School, Agra. Currently pursuing Computer Science Engineering at VIT Chennai.";
+  }
+
+  // projects
+  if (msg.includes("project")) {
+    return "SippiSaans – Web-Based Text Messaging Application; Bank Account Opening Form; Interactive Portfolio Chatbot.";
+  }
+
+  // thanks / goodbye
+  if (msg.includes("thanks") || msg.includes("thank you")) {
+    return "You are welcome.";
+  }
+
+  if (msg.includes("bye") || msg.includes("goodbye")) {
+    return "Goodbye. Have a nice day.";
+  }
+
+  // default
+  return "I did not understand that. Please try: skills, education, or projects.";
+}
+
+function sendMessage() {
+  const input = document.getElementById("userInput");
+  const text = input.value.trim().toLowerCase();
+  if (!text) return;
+
+  addMessage("You: " + input.value, "user");
+  addMessage("Bot: " + botReply(text), "bot");
+  input.value = "";
+}
+
+function quickAsk(topic) {
+  addMessage("You: " + topic, "user");
+  addMessage("Bot: " + botReply(topic), "bot");
+}
+
+document.getElementById("userInput").addEventListener("keypress", e => {
+  if (e.key === "Enter") sendMessage();
+});
+</script>
+
+
+</body>
+</html>
+
